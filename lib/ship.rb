@@ -11,6 +11,7 @@ class Ship
     @squares = occupies_squares(type, location, direction)
   end
 
+  # only written for east and west facing ships so far
   def occupies_squares(type, location, direction)
     squares = []
 
@@ -22,13 +23,32 @@ class Ship
     	y = (location.split(//))[1]
     	
     	(size - 1).times do 
-    		y = y.next!
-    		coordinate_string = x << y.to_s
+    		x = next_x_coordinate(x)
+    		coordinate_string = x + y.to_s
     		squares << coordinate_string.to_sym
     	end
     end
 
+    if direction == :W 
+      x = location.split(//).first
+      y = (location.split(//))[1]
+
+      (size - 1).times do 
+        x = previous_x_coordinate(x)
+        coordinate_string = x + y.to_s
+        squares << coordinate_string.to_sym
+      end
+    end
+
     return squares
+  end
+
+  def next_x_coordinate(x_coordinate)
+    x_coordinate.next
+  end
+
+  def previous_x_coordinate(x_coordinate)
+    (x_coordinate.chr.ord - 1).chr
   end
 
   def ship_types
