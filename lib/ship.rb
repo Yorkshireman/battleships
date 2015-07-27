@@ -2,7 +2,7 @@ class Ship
   attr_reader :location, :type, :size, :direction, :squares
 
   def initialize(type, location, direction)
-    fail 'Incorrect ship type' unless valid_ship_type?(type)
+    fail 'Invalid ship type' unless valid_ship_type?(type)
     fail 'Direction must be :N, :S, :E or :W' unless valid_direction?(direction)
     @location = location
     @direction = direction

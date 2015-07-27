@@ -44,11 +44,11 @@ describe Ship do
   end
 
   it 'type must match one of the ship types' do
-    expect { Ship.new('incorrect_type', 'A1', :N) }.to raise_error 'Incorrect ship type'
+    expect { Ship.new('incorrect_type', 'A1', :N) }.to raise_error 'Invalid ship type'
   end
 
   describe '#ship_types' do
-    it 'returns a hash' do
+    it 'returns a hash of ship types; each has a name and a size' do
       expect(@ship.ship_types).to be_a Hash
     end
   end
