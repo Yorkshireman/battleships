@@ -1,5 +1,5 @@
 class Ship
-  attr_reader :location, :type, :size, :direction
+  attr_reader :location, :type, :size, :direction, :squares
 
   def initialize(type, location, direction)
     fail 'Incorrect ship type' unless valid_ship_type?(type)
@@ -8,6 +8,27 @@ class Ship
     @direction = direction
     @type = type
     @size = ship_types[type]
+    @squares = occupies_squares(type, location, direction)
+  end
+
+  def occupies_squares(type, location, direction)
+    squares = []
+
+    # pushes first square into squares
+    squares << location.to_sym
+
+    if direction == :E
+    	x = location.split(//).first
+    	y = (location.split(//))[1]
+    	
+    	(size - 1).times do 
+    		y = y.next!
+    		coordinate_string = x << y.to_s
+    		squares << coordinate_string.to_sym
+    	end
+    end
+
+    return squares
   end
 
   def ship_types

@@ -2,12 +2,12 @@ require 'board'
 
 describe Board do
 
-  let(:ship){ double :ship }
-  let(:ship_with_location){ double :ship, location: "A1" }
+  let(:ship_with_location){ double :ship_with_location, location: "A1", :squares => [:A1, :A2] }
+  let(:ship_with_location2){ double :ship_with_location2, location: "A1", :squares => [:B1, :A2] }
 
-	it 'has place_ship method' do
-		expect(subject).to respond_to :place_ship
-	end
+  it 'has a default size' do
+  	expect(subject.size).to eq Board::DEFAULT_SIZE
+  end
 
 	describe '#place_ship' do
 		it 'takes a ship' do
@@ -15,8 +15,13 @@ describe Board do
 		end
 
 		it 'places a ship on the board' do
-			subject.place_ship(ship)
-			expect(subject.ships.include?(ship)).to be true
+			subject.place_ship(ship_with_location)
+			expect(subject.ships.include?(ship_with_location)).to be true
+		end
+
+		it 'fails if any squares are already occupied by a ship' do 
+			subject.place_ship(ship_with_location)
+			expect{subject.place_ship(ship_with_location2)}.to raise_error "One or more squares already occupied"
 		end
 	end
 
