@@ -24,7 +24,7 @@ class Board
 		if ships.any?{ |ship| ship.location == position }
 			return "HIT!"
 		else
-			fail "Miss!"
+			return "Miss!"
 		end
 	end
 end

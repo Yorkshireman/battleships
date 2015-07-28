@@ -12,6 +12,9 @@ class Ship
   end
 
   # only written for east and west facing ships so far
+  # needs refactoring down.
+  # MOVE RESPONSIBILITY OF OCCUPIES_SQUARES TO BOARD CLASS
+  # MAYBE CHANGE LOCATION TO STARTING_SQUARE
   def occupies_squares(type, location, direction)
     squares = []
 
@@ -24,7 +27,7 @@ class Ship
     	
     	(size - 1).times do 
     		x = next_x_coordinate(x)
-    		coordinate_string = x + y.to_s
+    		coordinate_string = x + y.to_s  #separate out into a separate method
     		squares << coordinate_string.to_sym
     	end
     end
