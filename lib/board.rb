@@ -12,7 +12,29 @@ class Board
   end
 
   def place_ship(ship, location, direction) 
-    ships << ship
+    ships[ship] = where_is_ship?(ship, location, direction)
+  end
+
+  def where_is_ship?(ship, location, direction)
+    squares = []
+    squares << location.to_sym
+
+    if direction == :E 
+      x = location.split(//).first
+      y = (location.split(//))[1]
+
+      (ship.size - 1).times do 
+        x = next_x_coordinate(x)
+        coordinate_string = x + y
+        squares << coordinate_string.to_sym
+      end
+    end
+
+    return squares
+  end
+
+  def next_x_coordinate(x_coordinate)
+    x_coordinate.next
   end
 
 	# attr_reader :ships, :size, :occupied_squares
