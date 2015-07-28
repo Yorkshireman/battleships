@@ -27,7 +27,7 @@ class Ship
     	
     	(size - 1).times do 
     		x = next_x_coordinate(x)
-    		coordinate_string = x + y.to_s  #separate out into a separate method
+    		coordinate_string = x + y  #separate out into a separate method
     		squares << coordinate_string.to_sym
     	end
     end
@@ -38,7 +38,7 @@ class Ship
 
       (size - 1).times do 
         x = previous_x_coordinate(x)
-        coordinate_string = x + y.to_s
+        coordinate_string = x + y
         squares << coordinate_string.to_sym
       end
     end

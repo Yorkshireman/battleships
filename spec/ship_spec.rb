@@ -21,14 +21,6 @@ describe Ship do
     expect(ship.direction).to eq :N
   end
 
-  # it "has a 'squares' array" do
-  #   expect(ship.squares).to be_a Array
-  # end
-
-  # it 'populates squares array on initialization' do 
-  #   expect(ship.squares.count).to_not eq 0
-  # end
-
   describe 'Testing for east facing ships:' do
     context "when a patrol boat (2 squares long) is created at A1 facing East" do 
       it 'its squares array consists of :A1 and :B1 only' do 
