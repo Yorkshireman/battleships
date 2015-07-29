@@ -72,6 +72,10 @@ describe Ship do
   #   end
   # end
 
+  ship_with_invalid_type = Ship.new 'nonsense'
+  types = [ :patrol_boat, :submarine, :battleship, :destroyer ]
+  expect(types.any?{|type| type == ship_with_invalid_type.type}).to raise_error 'Invalid ship type'
+
   it 'type must match one of the ship types' do
     expect{Ship.new('incorrect_type')}.to raise_error 'Invalid ship type'
   end
