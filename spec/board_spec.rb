@@ -2,55 +2,43 @@ require 'board'
 
 describe Board do
 
-  let(:patrol_boat){ double :patrol_boat, size: 2 }
+  let(:patrol_boat){ double :patrol_boat, type: :patrol_boat }
+  let(:destroyer){ double :destroyer, type: :destroyer }
 
-  it 'has a default size' do
-  	expect(subject.size).to eq Board::DEFAULT_SIZE
+  it 'can have a ship' do
+    subject.place_ship(patrol_boat, :B1, :S)
+    expect(subject.grid).to include patrol_boat
   end
 
-  describe '#place_ship' do
-    it 'places a ship on the board' do 
-      subject.place_ship(patrol_boat, "A1", :E)
-      expect(subject.ships).to have_key patrol_boat
+  describe '#locate_ship?' do
+
+    context 'after placing a destroyer facing south' do
+      it 'returns the correct three squares' do
+        subject.place_ship(destroyer, :D5, :S)
+        expect(subject.locate_ship(destroyer)).to eq [:D5, :D6, :D7]
+      end
     end
 
-    it "stores a record of a ship's location on the board" do 
-      subject.place_ship(patrol_boat, "A1", :E)
-      expect(subject.ships[patrol_boat]).to eq [:A1, :B1]
+    context 'after placing a destroyer facing north' do
+      it 'returns the correct three squares' do
+        subject.place_ship(destroyer, :D5, :N)
+        expect(subject.locate_ship(destroyer)).to eq [:D5, :D4, :D3]
+      end
     end
+
+    context 'after placing a destroyer facing east' do
+      it 'returns the correct three squares' do
+        subject.place_ship(destroyer, :A1, :E)
+        expect(subject.locate_ship(destroyer)).to eq [:A1, :B1, :C1]
+      end
+    end
+
+    context 'after placing a destroyer facing west' do
+      it 'returns the correct three squares' do
+        subject.place_ship(destroyer, :C3, :W)
+        expect(subject.locate_ship(destroyer)).to eq [:C3, :B3, :A3]
+      end
+    end
+
   end
-
-  describe '#where_is_ship?' do 
-    it 'returns an array of squares the ship occupies' do 
-      expect(subject.where_is_ship?(patrol_boat, "A1", :E)).to eq [:A1, :B1]
-    end
-  end  
-
-  # let(:ship_with_location){ double :ship_with_location, location: "A1", :squares => [:A1, :A2] }
-  # let(:ship_with_location2){ double :ship_with_location2, location: "A1", :squares => [:B1, :A2] }
-
-	# describe '#place_ship' do
-	# 	it 'places a ship on the board' do
-	# 		subject.place_ship(ship_with_location)
-	# 		expect(subject.ships).to include (ship_with_location)
-	# 	end
-
-	# 	it 'fails if any squares are already occupied by a ship' do 
-	# 		subject.place_ship(ship_with_location)
-	# 		expect{subject.place_ship(ship_with_location2)}.to raise_error "One or more squares already occupied"
-	# 	end
-	# end
-
-	# describe '#fire' do
-	# 	it "fails if a ship doesn't exist at that location" do
-	# 		subject.place_ship(ship_with_location)
-	# 		expect(subject.fire "A2").to eq "Miss!" # Should be a method instead
-	# 	end
-
-	# 	it "returns 'HIT!' if a ship does exist at that location" do
-	# 		subject.place_ship(ship_with_location)
-	# 		expect(subject.fire("A1")).to eq "HIT!" # Should be a method instead
-	# 	end
-	# end
-
 end

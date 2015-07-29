@@ -2,64 +2,74 @@ require_relative './ship.rb'
 
 class Board
 
-  DEFAULT_SIZE = [2, 2]
+  attr_reader :grid
 
-  attr_reader :size, :ships
-
-  def initialize(size = DEFAULT_SIZE)
-    @size = DEFAULT_SIZE
-    @ships = {}
+  def initialize
+    @grid = {}
   end
 
-  def place_ship(ship, location, direction) 
-    ships[ship] = where_is_ship?(ship, location, direction)
+  def place_ship ship, location, direction
+    squares = occupies_squares(ship, location, direction)
+    grid.store(ship, squares)
   end
 
-  def where_is_ship?(ship, location, direction)
-    squares = []
-    squares << location.to_sym
+  def occupies_squares ship, location, direction
+    starting_square = location
+    squares = [starting_square]
 
-    if direction == :E 
-      x = location.split(//).first
-      y = (location.split(//))[1]
-
-      (ship.size - 1).times do 
-        x = next_x_coordinate(x)
-        coordinate_string = x + y
-        squares << coordinate_string.to_sym
+    if direction == :S
+      x = 0
+        ( ship_size(ship.type) - 1 ).times do
+        squares << (squares[x]).next
+        x += 1
       end
     end
 
-    return squares
+    if direction == :N
+      x = 0
+        ( ship_size(ship.type) - 1 ).times do
+        location = location.to_s
+        first_char = location[0]
+        second_char = (location[1].to_i - 1).to_s
+        location = (first_char + second_char).to_sym
+        squares << location
+        x += 1
+      end
+    end
+
+    if direction == :E
+      x = 0
+        ( ship_size(ship.type) - 1 ).times do
+        location = location.to_s
+        first_char = location[0].next
+        second_char = location[1]
+        location = (first_char + second_char).to_sym
+        squares << location
+        x += 1
+      end
+    end
+
+    if direction == :W
+      x = 0
+        ( ship_size(ship.type) - 1 ).times do
+        location = location.to_s
+        first_char = (location[0].ord - 1).chr
+        second_char = location[1]
+        location = (first_char + second_char).to_sym
+        squares << location
+        x += 1
+      end
+    end
+    
+    squares
   end
 
-  def next_x_coordinate(x_coordinate)
-    x_coordinate.next
+  def locate_ship ship
+    grid[ship]
   end
 
-	# attr_reader :ships, :size, :occupied_squares
-	# DEFAULT_SIZE = [2, 2]
-
-	# def initialize(size = DEFAULT_SIZE)
-	# 	@ships = []
-	# 	@size = DEFAULT_SIZE
-	# 	@occupied_squares = []
-	# end
-
-	# def place_ship(ship)
-	# 	ship.squares.each do |square|
-	# 		fail "One or more squares already occupied" if occupied_squares.include?(square)
-	# 		occupied_squares << square
-	# 	end
-
-	# 	ships << ship
-	# end
-
-	# def fire(position)
-	# 	if ships.any?{ |ship| ship.location == position }
-	# 		return "HIT!"
-	# 	else
-	# 		return "Miss!"
-	# 	end
-	# end
+  def ship_size type
+    sizes = {patrol_boat: 2, destroyer: 3, submarine: 3, battleship: 4, aircraft_carrier: 5}
+    sizes[type]
+  end
 end
