@@ -10,8 +10,22 @@ describe Board do
     expect(subject.ships).to include patrol_boat
   end
 
+  describe '#valid_direction?' do 
+    it "will return false if passed a direction that isn't :S or :E" do 
+      expect(subject.valid_direction? :G).to be false
+    end
+  end
+
+  it 'will not place a ship with an invalid direction' do 
+    expect{subject.place_ship :patrol_boat, :F5, :C}.to raise_error "Invalid direction - please choose :S or :E"
+  end
+
   it 'ships cannot be placed outside the board' do 
-    expect{subject.place_ship(patrol_boat, :L13, :S)}.to raise_error "Cannot place there - outside the board"
+    expect{subject.place_ship(patrol_boat, :BB3, :S)}.to raise_error "Cannot place there - outside the board"
+    expect{subject.place_ship(patrol_boat, :I9, :S)}.to raise_error "Cannot place there - outside the board"
+    expect{subject.place_ship(patrol_boat, :I9, :E)}.to raise_error "Cannot place there - outside the board"
+    expect{subject.place_ship(patrol_boat, :A9, :S)}.to raise_error "Cannot place there - outside the board"
+    expect{subject.place_ship(patrol_boat, :I1, :E)}.to raise_error "Cannot place there - outside the board"
   end
 
   describe '#outside_board?' do 
