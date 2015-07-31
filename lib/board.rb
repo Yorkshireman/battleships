@@ -21,8 +21,6 @@ class Board
   end
 
   def proposed_squares ship, location, direction
-    fail "Cannot place there - outside the board" if location.to_s.bytesize > 2
-
     starting_square = location
     squares = [starting_square]
 
