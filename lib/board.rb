@@ -34,7 +34,7 @@ class Board
       x = 0
         (ship_size(ship.type) - 1).times do
           next_square = squares[x].next
-          #fail "Cannot place there - outside the board" unless valid_square?(next_square)
+          fail "Cannot place there - outside the board" unless valid_square?(next_square)
           squares << (squares[x]).next
           x += 1
         end
@@ -46,7 +46,7 @@ class Board
       x = 0
       (ship_size(ship.type) - 1).times do
         location = (location.to_s[0].next + location.to_s[1]).to_sym
-        #fail "Cannot place there - outside the board" unless valid_square?(location)
+        fail "Cannot place there - outside the board" unless valid_square?(location)
         squares << location
         x += 1
       end
