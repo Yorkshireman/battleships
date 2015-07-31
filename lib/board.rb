@@ -11,12 +11,8 @@ class Board
   # Use a yield instead for the outside_board??
   def place_ship ship, location, direction
     fail "Invalid direction - please choose :S or :E" unless valid_direction? direction
-    squares = proposed_squares(ship, location, direction)
-    if outside_board?(squares)
-      fail "Cannot place there - outside the board"
-    else  
-      ships.store(ship, squares)
-    end
+    squares = proposed_squares(ship, location, direction) 
+    ships.store(ship, squares)
   end
 
   def valid_direction? direction
