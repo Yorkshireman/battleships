@@ -11,7 +11,7 @@ class Board
   # Use a yield instead for the outside_board??
   def place_ship ship, location, direction
     fail "Invalid direction - please choose :S or :E" unless valid_direction? direction
-    squares = proposed_squares(ship, location, direction) 
+    squares = test_squares(ship, location, direction) 
     ships.store(ship, squares)
   end
 
@@ -20,7 +20,7 @@ class Board
     valid_directions.include? direction
   end
 
-  def proposed_squares ship, location, direction
+  def test_squares ship, location, direction
     starting_square = location
     squares = [starting_square]
 
