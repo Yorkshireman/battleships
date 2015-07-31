@@ -26,17 +26,16 @@ class Board
 
     if direction == :S
       x = 0
-        (ship_size(ship.type) - 1).times do
-          next_square = squares[x].next
-          fail "Cannot place there - outside the board" if invalid_square?(next_square)
-          squares << (squares[x]).next
-          x += 1
-        end
+      (ship_size(ship.type) - 1).times do
+        next_square = squares[x].next
+        fail "Cannot place there - outside the board" if invalid_square?(next_square)
+        squares << (squares[x]).next
+        x += 1
+      end
     end
 
 
     if direction == :E
-      
       x = 0
       (ship_size(ship.type) - 1).times do
         location = (location.to_s[0].next + location.to_s[1]).to_sym
