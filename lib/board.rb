@@ -9,9 +9,9 @@ class Board
   end
 
   # Use a yield instead for the outside_board??
-  def place_ship ship, location, direction
+  def place_ship ship, coordinate, direction
     fail "Invalid direction - please choose :S or :E" unless valid_direction? direction
-    squares = test_squares(ship, location, direction) 
+    squares = generate_squares(ship, coordinate, direction) 
     ships.store(ship, squares)
   end
 
@@ -20,14 +20,13 @@ class Board
     valid_directions.include? direction
   end
 
-  def test_squares ship, location, direction
-    starting_square = location
+  def generate_squares ship, coordinate, direction
+    starting_square = coordinate
     squares = [starting_square]
 
     if direction == :S
       x = 0
       (ship_size(ship.type) - 1).times do
-        next_square = squares[x].next
         squares << (squares[x]).next
         x += 1
       end
@@ -37,13 +36,15 @@ class Board
     if direction == :E
       x = 0
       (ship_size(ship.type) - 1).times do
-        location = (location.to_s[0].next + location.to_s[1]).to_sym
-        squares << location
+        coordinate = (coordinate.to_s[0].next + coordinate.to_s[1]).to_sym
+        squares << coordinate
         x += 1
       end
 
     end
+
     check_for_errors(squares)
+    
     squares
   end
 
@@ -52,8 +53,7 @@ class Board
   end
 
   def invalid_square?(square)
-    valid_squares=[:A1, :A2, :A3, :A4, :A5, :A6, :A7, :A8, :A9, :B1, :B2, :B3, :B4, :B5, :B6, :B7, :B8, :B9, :C1, :C2, :C3, :C4, :C5, :C6, :C7, :C8, :C9, :D1, :D2, :D3, :D4, :D5, :D6, :D6, :D7, :D8, :D9, :E1, :E2, :E3, :E4, :E5, :E6, :E7, :E8, :E9, :F1, :F2, :F3, :F4, :F5, :F6, :F7, :F8, :F9, :G1, :G2, :G3, :G4, :G5, :G6, :G7, :G8, :G9, :H1, :H2, :H3, :H4, :H5, :H6, :H7, :H8, :H9, :I1, :I2, :I3, :I4, :I5, :I6, :I7, :I8, :I9]
-    !valid_squares.include?(square)
+    !build_grid.include?(square)
   end
 
   def outside_board?(squares)
@@ -68,4 +68,20 @@ class Board
     sizes = {patrol_boat: 2, destroyer: 3, submarine: 3, battleship: 4, aircraft_carrier: 5}
     sizes[type]
   end
+
+  def build_grid
+    letters = %w(A B C D E F G H I)
+    grid = []
+
+    letters.each do |letter|
+      x = 1
+      9.times do 
+        grid << ((letter + x.to_s).to_sym)
+        x += 1
+      end
+    end
+
+    grid
+  end
+
 end
