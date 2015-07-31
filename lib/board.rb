@@ -60,13 +60,7 @@ class Board
   end
 
   def outside_board?(squares)
-    squares.each do |square|
-      if invalid_square?(square)
-        return true
-      else
-        return false
-      end
-    end
+    squares.any?{|square| invalid_square?(square)}
   end
 
   def locate_ship ship
