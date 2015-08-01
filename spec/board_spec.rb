@@ -26,13 +26,43 @@ describe Board do
   end
 
   describe '#valid_direction?' do 
-    it "will return false if passed a direction that isn't :S or :E" do 
+    it "returns false if passed a direction that isn't :N, :S, :E or :W" do 
       expect(subject.valid_direction? :G).to be false
+    end
+
+    it "returns true for :N" do 
+      expect(subject.valid_direction? :N).to be true
+    end
+
+    it "returns true for :S" do 
+      expect(subject.valid_direction? :S).to be true
+    end
+
+    it "returns true for :E" do 
+      expect(subject.valid_direction? :E).to be true
+    end
+
+    it "returns true for :S" do 
+      expect(subject.valid_direction? :W).to be true
     end
   end
 
   it 'will not place a ship with an invalid direction' do 
     expect{subject.place_ship :patrol_boat, :F5, :C}.to raise_error "Invalid direction - please choose :S or :E"
+  end
+
+  describe '#generate_squares' do 
+    it 'returns correct squares for a north-facing ship' do 
+      expect(subject.generate_squares destroyer, :B3, :N).to eq [:B3, :B2, :B1]
+    end
+
+    it 'returns correct squares for a south-facing ship' do 
+      expect(subject.generate_squares destroyer, :B2, :S).to eq [:B2, :B3, :B4]
+    end
+
+    it 'returns correct squares for a west-facing ship' do
+      expect(subject.generate_squares destroyer, :C5, :W).to eq [:C5, :B5, :A5]
+    end
   end
 
   it 'ships cannot be placed outside the board' do 

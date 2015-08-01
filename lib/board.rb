@@ -8,17 +8,16 @@ class Board
 
   def initialize(size = DEFAULT_SIZE)
     @ships = {}
-    @size = check_size(size)
+    @size = check_board_size(size)
   end
 
-  def check_size(size)
+  def check_board_size(size)
     unless size > 0 && size <= 9
       fail "Maximum board size is 9"
     end
     size
   end
 
-  # Use a yield instead for the outside_board??
   def place_ship ship, coordinate, direction
     fail "Invalid direction - please choose :S or :E" unless valid_direction? direction
     squares = generate_squares(ship, coordinate, direction) 
@@ -26,7 +25,7 @@ class Board
   end
 
   def valid_direction? direction
-    valid_directions = [:S, :E]
+    valid_directions = [:N, :S, :E, :W]
     valid_directions.include? direction
   end
 
@@ -34,23 +33,14 @@ class Board
     starting_square = coordinate
     squares = [starting_square]
 
-    if direction == :S
-      x = 0
-      (ship_size(ship.type) - 1).times do
-        squares << (squares[x]).next
-        x += 1
-      end
-    end
-
-
-    if direction == :E
-      x = 0
-      (ship_size(ship.type) - 1).times do
-        coordinate = (coordinate.to_s[0].next + coordinate.to_s[1]).to_sym
-        squares << coordinate
-        x += 1
-      end
-
+    x = 0
+    (ship_size(ship.type) - 1).times do
+      coordinate = (coordinate[0] + (((coordinate[1].to_i) - 1).to_s)).to_sym if direction == :N
+      coordinate = (squares[x]).next if direction == :S
+      coordinate = (coordinate[0].next + coordinate[1]).to_sym if direction == :E
+      coordinate = ((coordinate[0].ord - 1).chr + coordinate[1]).to_sym if direction == :W
+      squares << coordinate
+      x += 1
     end
 
     check_for_errors(squares)
