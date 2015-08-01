@@ -2,10 +2,20 @@ require_relative './ship.rb'
 
 class Board
 
-  attr_reader :ships
+  DEFAULT_SIZE = 9
 
-  def initialize
+  attr_reader :ships, :size
+
+  def initialize(size = DEFAULT_SIZE)
     @ships = {}
+    @size = check_size(size)
+  end
+
+  def check_size(size)
+    unless size > 0 && size <= 9
+      fail "Maximum board size is 9"
+    end
+    size
   end
 
   # Use a yield instead for the outside_board??
@@ -48,16 +58,24 @@ class Board
     squares
   end
 
-  def check_for_errors squares
+  def check_for_errors(squares)
     fail "Cannot place there - outside the board" if outside_board?(squares)
+    fail "Cannot place ship there - one or more squares would overlap an existing ship" if overlap?(squares)
   end
 
   def invalid_square?(square)
-    !build_grid.include?(square)
+    !build_grid.member?(square)
   end
 
   def outside_board?(squares)
     squares.any?{|square| invalid_square?(square)}
+  end
+
+  def overlap?(squares)
+    squares.each do |square|
+      return true if ships.values.any?{|coords| coords.include?(square)}
+    end
+    return false
   end
 
   def locate_ship ship
@@ -70,12 +88,18 @@ class Board
   end
 
   def build_grid
-    letters = %w(A B C D E F G H I)
     grid = []
+    letters = []
+
+    letter = "A"
+    self.size.times do
+      letters << letter
+      letter = letter.next
+    end
 
     letters.each do |letter|
       x = 1
-      9.times do 
+      self.size.times do 
         grid << ((letter + x.to_s).to_sym)
         x += 1
       end
