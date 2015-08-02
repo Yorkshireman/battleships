@@ -94,8 +94,30 @@ class Board
         x += 1
       end
     end
-
     grid
+  end
+
+  def fire_on square 
+    if hit?(square)
+      self.ships.each do |ship, coordinates|
+        remove_coordinate_from_ship(coordinates, square) if coordinates.include? square
+      end
+      return "HIT!!"
+    end
+
+    return "MISS!"
+  end
+
+  def remove_coordinate_from_ship coordinates, square
+    hit_index = coordinates.index{|coordinate| coordinate == square}
+    coordinates.slice!(hit_index)
+  end
+
+  def hit? square
+    ships.each do |ship|
+      return true if ships.values.any?{|coords| coords.include? square}
+    end
+    return false
   end
 
 end

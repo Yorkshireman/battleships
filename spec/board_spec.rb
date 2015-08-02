@@ -102,7 +102,6 @@ describe Board do
   end
 
   describe '#locate_ship' do
-
     context 'after placing a destroyer facing south' do
       it 'returns the correct three squares' do
         subject.place_ship(destroyer, :D5, :S)
@@ -116,6 +115,52 @@ describe Board do
         expect(subject.locate_ship(destroyer)).to eq [:A1, :B1, :C1]
       end
     end
-
   end
+
+  describe '#hit?' do
+    it 'if passed a square that contains a ship, it returns that ship' do 
+      subject.place_ship destroyer, :D5, :W
+      expect(subject.hit? :C5).to be true
+    end
+
+    it 'returns false if a passed a square that does not contain a ship' do 
+      subject.place_ship destroyer, :C5, :S 
+      expect(subject.hit? :D2).to be false
+    end
+  end
+
+  describe '#fire_on' do 
+    it "returns 'HIT!' if passed a square that contains a ship" do 
+      subject.place_ship destroyer, :D5, :W
+      expect(subject.fire_on :C5).to eq "HIT!!"
+    end
+
+    it "removes that square from the hit ship's coordinates array" do 
+      subject.place_ship destroyer, :D5, :W
+      subject.fire_on :C5
+      expect(subject.ships[destroyer]).not_to include :C5
+    end
+
+    it "removes the relevant square from a ship's array (in the ships hash) if hit" do
+      subject.place_ship destroyer, :D4, :S
+      subject.fire_on :D5
+      expect(subject.ships[destroyer]).not_to include :D5
+    end
+
+    describe '#remove_coordinate_from_ship' do 
+      context "when passed an array of squares and a square as a second argument (that is also equal to a square in the array)" do
+        it 'finds the index of the matching square and removes that square from the array' do 
+          coordinates = [:A1, :A2, :A3, :A4]
+          subject.remove_coordinate_from_ship coordinates, :A2
+          expect(coordinates).to_not include :A2
+        end
+      end
+    end
+
+    it "returns 'MISS!!!' if passed a square that does not contain a ship" do
+      subject.place_ship destroyer, :D5, :W
+      expect(subject.fire_on :C3).to eq "MISS!"
+    end
+  end
+
 end
